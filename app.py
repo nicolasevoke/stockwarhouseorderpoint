@@ -1,3 +1,4 @@
+
 from flask import Flask, request, jsonify
 import requests
 
@@ -19,6 +20,7 @@ def get_session_id():
         }
     }
     res = requests.post(f"{ODOO_URL}/web/session/authenticate", json=payload)
+    res.raise_for_status()
     session_id = res.cookies.get("session_id")
     if not session_id:
         raise ValueError("No se pudo obtener session_id.")
@@ -51,6 +53,7 @@ def get_stock_warehouse_orderpoint():
         }
 
         res = requests.post(f"{ODOO_URL}/web/dataset/call_kw/stock.warehouse.orderpoint/search_read", json=payload, headers=headers)
+        res.raise_for_status()
         json_res = res.json()
 
         if "error" in json_res:
